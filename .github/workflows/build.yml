@@ -333,10 +333,10 @@ jobs:
           cmake --install ${{ env.BUILD_DIR }}
 
           cd ${{ env.INSTALL_DIR }}
-          chmod +x "PrismLauncher.app/Contents/MacOS/prismlauncher"
-          sudo codesign --sign - --deep --force --entitlements "../program_info/App.entitlements" --options runtime "PrismLauncher.app/Contents/MacOS/prismlauncher"
-          mv "PrismLauncher.app" "Prism Launcher.app"
-          tar -czf ../PrismLauncher.tar.gz *
+          chmod +x "SpectrumLauncher.app/Contents/MacOS/spectrumlauncher"
+          sudo codesign --sign - --deep --force --entitlements "../program_info/App.entitlements" --options runtime "SpectrumLauncher.app/Contents/MacOS/spectrumlauncher"
+          mv "SpectrumLauncher.app" "Spectrum Launcher.app"
+          tar -czf ../SpectrumLauncher.tar.gz *
 
       - name: Make Sparkle signature (macOS)
         if: matrix.name == 'macOS'
@@ -344,7 +344,7 @@ jobs:
           if [ '${{ secrets.SPARKLE_ED25519_KEY }}' != '' ]; then
             brew install openssl@3
             echo '${{ secrets.SPARKLE_ED25519_KEY }}' > ed25519-priv.pem
-            signature=$(/usr/local/opt/openssl@3/bin/openssl pkeyutl -sign -rawin -in ${{ github.workspace }}/PrismLauncher.tar.gz -inkey ed25519-priv.pem | openssl base64 | tr -d \\n)
+            signature=$(/usr/local/opt/openssl@3/bin/openssl pkeyutl -sign -rawin -in ${{ github.workspace }}/SpectrumLauncher.tar.gz -inkey ed25519-priv.pem | openssl base64 | tr -d \\n)
             rm ed25519-priv.pem
             cat >> $GITHUB_STEP_SUMMARY << EOF
           ### Artifact Information :information_source:
@@ -371,8 +371,8 @@ jobs:
           cd ${{ env.INSTALL_DIR }}
           if ("${{ matrix.qt_ver }}" -eq "5")
           {
-            Copy-Item D:/a/PrismLauncher/Qt/Tools/OpenSSL/Win_x86/bin/libcrypto-1_1.dll -Destination libcrypto-1_1.dll
-            Copy-Item D:/a/PrismLauncher/Qt/Tools/OpenSSL/Win_x86/bin/libssl-1_1.dll -Destination libssl-1_1.dll
+            Copy-Item D:/a/SpectrumLauncher/Qt/Tools/OpenSSL/Win_x86/bin/libcrypto-1_1.dll -Destination libcrypto-1_1.dll
+            Copy-Item D:/a/SpectrumLauncher/Qt/Tools/OpenSSL/Win_x86/bin/libssl-1_1.dll -Destination libssl-1_1.dll
           }
 
       - name: Package (Windows MinGW-w64, portable)
@@ -400,7 +400,7 @@ jobs:
           cmake --install ${{ env.BUILD_DIR }} --prefix ${{ env.INSTALL_DIR }}
 
           cd ${{ env.INSTALL_DIR }}
-          tar --owner root --group root -czf ../PrismLauncher.tar.gz *
+          tar --owner root --group root -czf ../SpectrumLauncher.tar.gz *
 
       - name: Package (Linux, portable)
         if: runner.os == 'Linux'
@@ -409,7 +409,7 @@ jobs:
           cmake --install ${{ env.BUILD_DIR }} --prefix ${{ env.INSTALL_PORTABLE_DIR }} --component portable
 
           cd ${{ env.INSTALL_PORTABLE_DIR }}
-          tar -czf ../PrismLauncher-portable.tar.gz *
+          tar -czf ../SpectrumLauncher-portable.tar.gz *
 
       - name: Package AppImage (Linux)
         if: runner.os == 'Linux' && matrix.qt_ver != 5
@@ -417,7 +417,7 @@ jobs:
         run: |
           cmake --install ${{ env.BUILD_DIR }} --prefix ${{ env.INSTALL_APPIMAGE_DIR }}/usr
 
-          export OUTPUT="PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage"
+          export OUTPUT="SpectrumLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage"
 
           chmod +x linuxdeploy-*.AppImage
 
@@ -428,7 +428,7 @@ jobs:
 
           cp -r ${{ github.workspace }}/JREs/jre17/* ${{ env.INSTALL_APPIMAGE_DIR }}/usr/lib/jvm/java-17-openjdk
 
-          cp -r /home/runner/work/PrismLauncher/Qt/${{ matrix.qt_version }}/gcc_64/plugins/iconengines/* ${{ env.INSTALL_APPIMAGE_DIR }}/usr/plugins/iconengines
+          cp -r /home/runner/work/SpectrumLauncher/Qt/${{ matrix.qt_version }}/gcc_64/plugins/iconengines/* ${{ env.INSTALL_APPIMAGE_DIR }}/usr/plugins/iconengines
           
           cp /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 ${{ env.INSTALL_APPIMAGE_DIR }}/usr/lib/
           cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 ${{ env.INSTALL_APPIMAGE_DIR }}//usr/lib/
@@ -450,64 +450,64 @@ jobs:
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher.tar.gz
+          name: SpectrumLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: SpectrumLauncher.tar.gz
 
       - name: Upload binary zip (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: SpectrumLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
           path: ${{ env.INSTALL_DIR }}/**
 
       - name: Upload binary zip (Windows, portable)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ matrix.name }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: SpectrumLauncher-${{ matrix.name }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
           path: ${{ env.INSTALL_PORTABLE_DIR }}/**
 
       - name: Upload installer (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ matrix.name }}-Setup-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher-Setup.exe
+          name: SpectrumLauncher-${{ matrix.name }}-Setup-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: SpectrumLauncher-Setup.exe
 
       - name: Upload binary tarball (Linux, Qt 5)
         if: runner.os == 'Linux' && matrix.qt_ver != 6
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher.tar.gz
+          name: SpectrumLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: SpectrumLauncher.tar.gz
 
       - name: Upload binary tarball (Linux, portable, Qt 5)
         if: runner.os == 'Linux' && matrix.qt_ver != 6
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ runner.os }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher-portable.tar.gz
+          name: SpectrumLauncher-${{ runner.os }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: SpectrumLauncher-portable.tar.gz
 
       - name: Upload binary tarball (Linux, Qt 6)
         if: runner.os == 'Linux' && matrix.qt_ver !=5
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ runner.os }}-Qt6-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher.tar.gz
+          name: SpectrumLauncher-${{ runner.os }}-Qt6-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: SpectrumLauncher.tar.gz
 
       - name: Upload binary tarball (Linux, portable, Qt 6)
         if: runner.os == 'Linux' && matrix.qt_ver != 5
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ runner.os }}-Qt6-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher-portable.tar.gz
+          name: SpectrumLauncher-${{ runner.os }}-Qt6-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: SpectrumLauncher-portable.tar.gz
 
       - name: Upload AppImage (Linux)
         if: runner.os == 'Linux' && matrix.qt_ver != 5
         uses: actions/upload-artifact@v3
         with:
-          name: PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
-          path: PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
+          name: SpectrumLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
+          path: SpectrumLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
   snap:
     runs-on: ubuntu-20.04
     steps:
@@ -548,7 +548,7 @@ jobs:
         if: inputs.build_type == 'Debug'
         uses: flatpak/flatpak-github-actions/flatpak-builder@v5
         with:
-          bundle: "Prism Launcher.flatpak"
+          bundle: "Spectrum Launcher.flatpak"
           manifest-path: flatpak/org.prismlauncher.PrismLauncher.yml 
 
   nix:
