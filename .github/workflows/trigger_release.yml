@@ -37,12 +37,12 @@ jobs:
         run: |
           mv ${{ github.workspace }}/SpectrumLauncher-source SpectrumLauncher-${{ env.VERSION }}
           mv SpectrumLauncher-Linux-Qt6-Portable*/SpectrumLauncher-portable.tar.gz SpectrumLauncher-Linux-Qt6-Portable-${{ env.VERSION }}.tar.gz
-          mv SpectrumLauncher-Linux-Qt6*/PrismLauncher.tar.gz SpectrumLauncher-Linux-Qt6-${{ env.VERSION }}.tar.gz          
+          mv SpectrumLauncher-Linux-Qt6*/SpectrumLauncher.tar.gz SpectrumLauncher-Linux-Qt6-${{ env.VERSION }}.tar.gz          
           mv SpectrumLauncher-Linux-Portable*/SpectrumLauncher-portable.tar.gz SpectrumLauncher-Linux-Portable-${{ env.VERSION }}.tar.gz
-          mv SpectrumLauncher-Linux*/PrismLauncher.tar.gz SpectrumLauncher-Linux-${{ env.VERSION }}.tar.gz
+          mv SpectrumLauncher-Linux*/SpectrumLauncher.tar.gz SpectrumLauncher-Linux-${{ env.VERSION }}.tar.gz
           mv SpectrumLauncher-*.AppImage/SpectrumLauncher-*.AppImage SpectrumLauncher-Linux-${{ env.VERSION }}-x86_64.AppImage
-          mv SpectrumLauncher-macOS-Legacy*/PrismLauncher.tar.gz SpectrumLauncher-macOS-Legacy-${{ env.VERSION }}.tar.gz
-          mv SpectrumLauncher-macOS*/PrismLauncher.tar.gz SpectrumLauncher-macOS-${{ env.VERSION }}.tar.gz
+          mv SpectrumLauncher-macOS-Legacy*/SpectrumLauncher.tar.gz SpectrumLauncher-macOS-Legacy-${{ env.VERSION }}.tar.gz
+          mv SpectrumLauncher-macOS*/SpectrumLauncher.tar.gz SpectrumLauncher-macOS-${{ env.VERSION }}.tar.gz
 
           tar -czf SpectrumLauncher-${{ env.VERSION }}.tar.gz SpectrumLauncher-${{ env.VERSION }}
 
